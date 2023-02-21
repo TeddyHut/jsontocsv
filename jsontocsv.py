@@ -14,31 +14,37 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    previous_hash = None
-    while True:
-        reqtime_str = datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3]
-        if args.verbose:
-            print(f"Request at: {reqtime_str}", end="", flush=True)
+    def main():
+        previous_hash = None
+        while True:
+            reqtime_str = datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3]
+            if args.verbose:
+                print(f"Request at: {reqtime_str}", end="", flush=True)
 
-        r = requests.get(args.url)
-        if args.verbose:
-            print(f" Received {r.status_code}", end="")
-        print("\n", end="")
-        r.raise_for_status()
+            r = requests.get(args.url)
+            if args.verbose:
+                print(f" Received {r.status_code}", end="")
+            print("\n", end="")
+            r.raise_for_status()
 
-        current_hash = hash(r.text)
-        if current_hash != previous_hash:
-            previous_hash = current_hash
-            if not args.silent:
-                print(f"Update  at: {reqtime_str}")
+            current_hash = hash(r.text)
+            if current_hash != previous_hash:
+                previous_hash = current_hash
+                if not args.silent:
+                    print(f"Update  at: {reqtime_str}")
 
-            jsondata = r.json()
+                jsondata = r.json()
 
-            with open(args.output, "w") as csvfile:
-                # Write header row - assumes that jsondata[0] exists
-                csvfile.write(",".join(f"\"{x}\"" for x in jsondata[0].keys()) + "\n")
-                # Write data rows
-                for row in jsondata:
-                    csvfile.write(",".join(f"\"{x}\"" for x in row.values()) + "\n")
+                with open(args.output, "w") as csvfile:
+                    # Write header row - assumes that jsondata[0] exists
+                    csvfile.write(",".join(f"\"{x}\"" for x in jsondata[0].keys()) + "\n")
+                    # Write data rows
+                    for row in jsondata:
+                        csvfile.write(",".join(f"\"{x}\"" for x in row.values()) + "\n")
 
-        time.sleep(args.delay)
+            time.sleep(args.delay)
+
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
