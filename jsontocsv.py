@@ -8,7 +8,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert an array of json objects at a http URL to CSV at regular intervals", prog="jsontocsv")
     parser.add_argument("-s", "--silent", action="store_true", help="only print output on error")
     parser.add_argument("-v", "--verbose", action="store_true", help="print on every request")
-    parser.add_argument("-d", "--delay", help="delay between requests in seconds [default: 10]", default=10)
+    parser.add_argument("-d", "--delay",type=float, help="delay between requests in seconds [default: 0]", default=0)
     parser.add_argument("url", help="URL of json")
     parser.add_argument("output", help=f"CSV output file name [default: {DEFAULT_OUTPUT_FILENAME}]", nargs="?", default=DEFAULT_OUTPUT_FILENAME)
 
