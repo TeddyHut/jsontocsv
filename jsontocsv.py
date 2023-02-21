@@ -18,9 +18,12 @@ if __name__ == "__main__":
     while True:
         reqtime_str = datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3]
         if args.verbose:
-            print(f"Request at: {reqtime_str}")
+            print(f"Request at: {reqtime_str}", end="", flush=True)
 
         r = requests.get(args.url)
+        if args.verbose:
+            print(f" Received {r.status_code}", end="")
+        print("\n", end="")
         r.raise_for_status()
 
         current_hash = hash(r.text)
