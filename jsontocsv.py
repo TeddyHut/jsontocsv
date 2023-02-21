@@ -23,8 +23,7 @@ if __name__ == "__main__":
 
             r = requests.get(args.url)
             if args.verbose:
-                print(f" Received {r.status_code}", end="")
-            print("\n", end="")
+                print(f" Received {r.status_code}")
             r.raise_for_status()
 
             current_hash = hash(r.text)
